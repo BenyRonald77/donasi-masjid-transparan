@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { rupiah, persen, formatTanggal } from "@/lib/format";
 import DonasiPanel from "./DonasiPanel";
 import PengeluaranPanel from "./PengeluaranPanel";
+import TutupPanel from "./TutupPanel";
 import UbahKampanye from "./UbahKampanye";
 
 export default async function DetailKampanye({
@@ -73,6 +74,13 @@ export default async function DetailKampanye({
           </Link>
         </div>
       </div>
+
+      <TutupPanel
+        kampanyeId={k.id}
+        terkunci={terkunci}
+        hash={k.penutupan?.hashLaporan ?? null}
+        ditutupPada={k.penutupan?.ditutupPada ?? null}
+      />
 
       <section>
         <h2 className="mb-2 text-lg font-bold">Donasi</h2>
