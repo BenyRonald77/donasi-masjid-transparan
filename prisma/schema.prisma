@@ -1,0 +1,56 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Kampanye {
+  id          Int               @id @default(autoincrement())
+  nama        String
+  deskripsi   String            @default("")
+  targetRp    Int
+  terkumpulRp Int               @default(0)
+  tenggat     String // YYYY-MM-DD
+  status      String            @default("aktif") // aktif | ditutup
+  createdAt   String // ISO
+  donasi      Donasi[]
+  pengeluaran Pengeluaran[]
+  penutupan   PenutupanPeriode?
+}
+
+model Donasi {
+  id              Int      @id @default(autoincrement())
+  kampanyeId      Int
+  kampanye        Kampanye @relation(fields: [kampanyeId], references: [id], onDelete: Cascade)
+  donaturNama     String
+  nominalRp       Int
+  kodeUnik        Int // 100-999
+  totalTransferRp Int // nominalRp + kodeUnik
+  status          String   @default("pending") // pending | terkonfirmasi | batal
+  metode          String   @default("transfer")
+  createdAt       String // ISO
+}
+
+model Pengeluaran {
+  id          Int      @id @default(autoincrement())
+  kampanyeId  Int
+  kampanye    Kampanye @relation(fields: [kampanyeId], references: [id], onDelete: Cascade)
+  keterangan  String
+  nominalRp   Int
+  tanggal     String // YYYY-MM-DD
+  penerima    String
+  buktiUrl    String?
+  createdAt   String // ISO
+}
+
+model PenutupanPeriode {
+  id          Int      @id @default(autoincrement())
+  kampanyeId  Int      @unique
+  kampanye    Kampanye @relation(fields: [kampanyeId], references: [id], onDelete: Cascade)
+  ditutupPada String // ISO
+  hashLaporan String // SHA-256 hex
+  ringkasan   String // JSON
+}
