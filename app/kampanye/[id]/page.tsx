@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { rupiah, persen, formatTanggal } from "@/lib/format";
 import DonasiPanel from "./DonasiPanel";
+import PengeluaranPanel from "./PengeluaranPanel";
 import UbahKampanye from "./UbahKampanye";
 
 export default async function DetailKampanye({
@@ -76,6 +77,11 @@ export default async function DetailKampanye({
       <section>
         <h2 className="mb-2 text-lg font-bold">Donasi</h2>
         <DonasiPanel kampanyeId={k.id} donasi={k.donasi} terkunci={terkunci} />
+      </section>
+
+      <section>
+        <h2 className="mb-2 text-lg font-bold">Pengeluaran</h2>
+        <PengeluaranPanel kampanyeId={k.id} pengeluaran={k.pengeluaran} terkunci={terkunci} />
       </section>
     </div>
   );
